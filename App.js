@@ -7,7 +7,7 @@
  */
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View,ScrollView,Alert,Button,FlatList,Picker} from 'react-native';
+import {Platform, StyleSheet, Text, View,ScrollView,Alert,Button,FlatList,Picker,Slider,Switch,AlertIOS} from 'react-native';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -21,14 +21,30 @@ export default class App extends Component<Props> {
   
   constructor(props) {
     super(props);
-    this.state = {language:'eng'};
+    this.state = {language:'python', creditlimit:120000};
 
     // Toggle the state every second
     
   }
   
   _onPressButton(){
-    Alert.alert("alert is working")
+    // Alert.alert("alert is working")
+
+    Alert.alert(
+      'Sync Complete',
+      'All your data are belong to us.',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {
+          text: 'Install',
+          onPress: () => console.log('Install Pressed'),
+        },
+      ]
+     );
   }
   getvalue(){
     // return fetch('https://facebook.github.io/react-native/movies.json').then(alert())
@@ -37,6 +53,8 @@ export default class App extends Component<Props> {
   render() {
     return (
       <View>
+        <ScrollView>
+
         <Button
             onPress={this._onPressButton}
             title="Press Me"
@@ -55,7 +73,6 @@ export default class App extends Component<Props> {
         
         </View>
        </View>
-       <ScrollView>
 
         <FlatList
             data={[
@@ -80,7 +97,6 @@ export default class App extends Component<Props> {
             }
             
           />
-        </ScrollView>
         <Picker
           selectedValue={this.state.language}
           style={{ height: 50, width: '100%' }}
@@ -88,6 +104,29 @@ export default class App extends Component<Props> {
           <Picker.Item label="Java" value="java" />
           <Picker.Item label="JavaScript" value="js" />
         </Picker>
+        <Text>        {this.state.creditlimit}</Text>
+        <Slider  
+            style={{ height: 50, width: '100%' }} 
+            maximumValue={1200000} minimumValue={120} 
+            thumbTintColor={'aqua'} 
+            minimumTrackTintColor ={'green'}
+            value={this.state.creditlimit}
+            onValueChange = {(item,index) => this.setState({creditlimit:item})}
+            step={-1}
+            >
+
+        </Slider>
+        
+        <Switch
+          style={{ height: 50, width: '100%' }}
+          disabled={true}  
+        >
+
+        </Switch>
+
+       
+       </ScrollView>
+
       </View>
 
 
