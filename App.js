@@ -7,7 +7,7 @@
  */
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View,ScrollView,Alert,Button,FlatList} from 'react-native';
+import {Platform, StyleSheet, Text, View,ScrollView,Alert,Button,FlatList,Picker} from 'react-native';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -18,6 +18,15 @@ const instructions = Platform.select({
 
 type Props = {};
 export default class App extends Component<Props> {
+  
+  constructor(props) {
+    super(props);
+    this.state = {language:'eng'};
+
+    // Toggle the state every second
+    
+  }
+  
   _onPressButton(){
     Alert.alert("alert is working")
   }
@@ -72,7 +81,13 @@ export default class App extends Component<Props> {
             
           />
         </ScrollView>
-
+        <Picker
+          selectedValue={this.state.language}
+          style={{ height: 50, width: '100%' }}
+          onValueChange={(itemValue, itemIndex) => this.setState({language: itemValue})}>
+          <Picker.Item label="Java" value="java" />
+          <Picker.Item label="JavaScript" value="js" />
+        </Picker>
       </View>
 
 
