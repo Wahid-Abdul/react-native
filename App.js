@@ -7,7 +7,7 @@
  */
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View,ScrollView,Alert,Button,FlatList,Picker,Slider,Switch,AlertIOS} from 'react-native';
+import {Platform, StyleSheet, Text, View,ScrollView,Alert,Button,FlatList,Picker,Slider,Switch,AlertIOS,RefreshControl} from 'react-native';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -16,15 +16,22 @@ const instructions = Platform.select({
     'Sr dev menu',
 });
 
-type Props = {};
-export default class App extends Component<Props> {
-  
+// type Props = {};
+// export default class App extends Component<Props> {
+  export default class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {language:'python', creditlimit:120000};
+    this.state = {language:'python', creditlimit:120000, refreshing: false,};
 
     // Toggle the state every second
     
+  }
+
+  _onRefresh = () => {
+    this.setState({refreshing: true});
+    fetch('https://facebook.github.io/react-native/movies.json').then(() => {
+      this.setState({refreshing: false});
+    });
   }
   
   _onPressButton(){
@@ -53,7 +60,16 @@ export default class App extends Component<Props> {
   render() {
     return (
       <View>
-        <ScrollView>
+        <ScrollView 
+         refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this._onRefresh}
+              tintColor="#ff0000"
+                  colors={['#ff0000', '#00ff00', '#0000ff']}
+                  progressBackgroundColor="rgba(100,100,100,0.5)"
+            />
+          }>
 
         <Button
             onPress={this._onPressButton}
@@ -73,7 +89,7 @@ export default class App extends Component<Props> {
         
         </View>
        </View>
-
+      <View style={styles.list}>
         <FlatList
             data={[
               {key: 'Devin'},
@@ -96,7 +112,10 @@ export default class App extends Component<Props> {
             
             }
             
+            
           />
+        </View>
+
         <Picker
           selectedValue={this.state.language}
           style={{ height: 50, width: '100%' }}
@@ -107,12 +126,12 @@ export default class App extends Component<Props> {
         <Text>        {this.state.creditlimit}</Text>
         <Slider  
             style={{ height: 50, width: '100%' }} 
-            maximumValue={1200000} minimumValue={120} 
+            maximumValue={120000} minimumValue={120} 
             thumbTintColor={'aqua'} 
             minimumTrackTintColor ={'green'}
-            value={this.state.creditlimit}
+            // value={this.state.creditlimit}
             onValueChange = {(item,index) => this.setState({creditlimit:item})}
-            step={-1}
+            step={0}
             >
 
         </Slider>
@@ -123,6 +142,18 @@ export default class App extends Component<Props> {
         >
 
         </Switch>
+
+         <View
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this._onRefresh}
+              tintColor="#ff0000"
+                  colors={['#ff0000', '#00ff00', '#0000ff']}
+                  progressBackgroundColor="#ffff00"
+            />
+          }
+        />
 
        
        </ScrollView>
@@ -151,6 +182,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#333333',
     marginBottom: 5,
+  },list:{
+    height: 160,
+    
   },
   box:{
     height:300,
